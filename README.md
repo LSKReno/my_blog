@@ -1,10 +1,5 @@
-## 文章列表
+# 白糖炒栗子 de 博客
 
-**面试官问系列：**
+[![Build Status](https://www.travis-ci.org/LSKReno/my_blog.svg?branch=master)](https://www.travis-ci.org/LSKReno/my_blog)
 
-- 2.[面试官问：JS的this指向](https://lxchuan12.cn/js-this/)
-
-**其他：**
-
-- 1.[JavaScript 对象所有API解析](https://lxchuan12.cn/js-object-api/)
-
+> 该博客用于记录前端相关知识

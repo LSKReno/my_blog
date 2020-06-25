@@ -8,4 +8,5 @@ branches:
       - "master"
 
 scripts:
+  - "npm install"
   - "npm run build"
