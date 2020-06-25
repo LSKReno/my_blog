@@ -5,7 +5,7 @@ console.log(__dirname, 'dirname');
 module.exports = {
 	// base: '/my_blog/',
 	dest: 'public',
-	title: 'Half Town前端周刊',
+	title: '白糖炒栗子de前端Blog',
 	keywords: '白糖炒栗子, LSKReno, Half Town, 前端路上',
 	description: '白糖炒栗子哒前端Blog',
 	serviceWorker: true,

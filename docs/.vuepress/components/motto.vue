@@ -20,11 +20,11 @@ export default {
 <style scoped>
 @font-face {
   font-family: "Halimun";
-  src: url(../public/Halimun-W7jn.ttf) format("truetype");
+  src: url(https://lskreno-typora.oss-cn-beijing.aliyuncs.com/Halimun-W7jn.ttf) format("truetype");
 }
 @font-face {
   font-family: "Bole";
-  src: url(../public/Bole.ttf) format("truetype");
+  src: url(https://lskreno-typora.oss-cn-beijing.aliyuncs.com/bole.ttf) format("truetype");
 }
 p {
   font-family: "Halimun", sans-serif;
