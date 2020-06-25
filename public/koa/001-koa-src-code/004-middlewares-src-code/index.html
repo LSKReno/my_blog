@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>004-常用Koa中间件源码 | Half Town前端周刊</title>
+    <meta name="description" content="白糖炒栗子哒前端Blog">
+    <link rel="icon" href="/favicon.ico">
+  <link rel="mainfest" href="/mainfest.json">
+    
+    <link rel="preload" href="/assets/css/0.styles.d4c32f31.css" as="style"><link rel="preload" href="/assets/js/app.b1906b97.js" as="script"><link rel="preload" href="/assets/js/2.bdee5faf.js" as="script"><link rel="preload" href="/assets/js/75.d452b4b5.js" as="script"><link rel="preload" href="/assets/js/8.e132ed9d.js" as="script"><link rel="prefetch" href="/assets/js/10.e085a21c.js"><link rel="prefetch" href="/assets/js/100.78a0b04f.js"><link rel="prefetch" href="/assets/js/101.02ef3e98.js"><link rel="prefetch" href="/assets/js/102.cdd542e1.js"><link rel="prefetch" href="/assets/js/103.de748a03.js"><link rel="prefetch" href="/assets/js/104.7455cba5.js"><link rel="prefetch" href="/assets/js/105.68a805c9.js"><link rel="prefetch" href="/assets/js/106.a2ff7e85.js"><link rel="prefetch" href="/assets/js/107.36f34ab6.js"><link rel="prefetch" href="/assets/js/108.f26732f6.js"><link rel="prefetch" href="/assets/js/109.8d05e086.js"><link rel="prefetch" href="/assets/js/11.f2fd41dc.js"><link rel="prefetch" href="/assets/js/110.c7f84bd1.js"><link rel="prefetch" href="/assets/js/111.0cdf0d73.js"><link rel="prefetch" href="/assets/js/12.450e705b.js"><link rel="prefetch" href="/assets/js/13.50973e7a.js"><link rel="prefetch" href="/assets/js/14.40fad099.js"><link rel="prefetch" href="/assets/js/15.a2d432ad.js"><link rel="prefetch" href="/assets/js/16.4ad6c82f.js"><link rel="prefetch" href="/assets/js/17.1bc86885.js"><link rel="prefetch" href="/assets/js/18.ade73665.js"><link rel="prefetch" href="/assets/js/19.a0f47a6e.js"><link rel="prefetch" href="/assets/js/20.5499b902.js"><link rel="prefetch" href="/assets/js/21.86afe090.js"><link rel="prefetch" href="/assets/js/22.29fa6f17.js"><link rel="prefetch" href="/assets/js/23.1af6f734.js"><link rel="prefetch" href="/assets/js/24.933ea1dd.js"><link rel="prefetch" href="/assets/js/25.7b5dc5f0.js"><link rel="prefetch" href="/assets/js/26.03194069.js"><link rel="prefetch" href="/assets/js/27.eb1fac5c.js"><link rel="prefetch" href="/assets/js/28.01df134d.js"><link rel="prefetch" href="/assets/js/29.697d4c02.js"><link rel="prefetch" href="/assets/js/3.77f61fb0.js"><link rel="prefetch" href="/assets/js/30.e1b58026.js"><link rel="prefetch" href="/assets/js/31.41db2b44.js"><link rel="prefetch" href="/assets/js/32.9f2db749.js"><link rel="prefetch" href="/assets/js/33.03b6d68a.js"><link rel="prefetch" href="/assets/js/34.09609909.js"><link rel="prefetch" href="/assets/js/35.c80be0ac.js"><link rel="prefetch" href="/assets/js/36.d15e6050.js"><link rel="prefetch" href="/assets/js/37.1ccd8184.js"><link rel="prefetch" href="/assets/js/38.ab0d4b98.js"><link rel="prefetch" href="/assets/js/39.8301eaad.js"><link rel="prefetch" href="/assets/js/4.90b687b0.js"><link rel="prefetch" href="/assets/js/40.d95907af.js"><link rel="prefetch" href="/assets/js/41.33845e14.js"><link rel="prefetch" href="/assets/js/42.8a256266.js"><link rel="prefetch" href="/assets/js/43.343b309f.js"><link rel="prefetch" href="/assets/js/44.e61b9da2.js"><link rel="prefetch" href="/assets/js/45.0eea8be7.js"><link rel="prefetch" href="/assets/js/46.861203d9.js"><link rel="prefetch" href="/assets/js/47.ae5bd907.js"><link rel="prefetch" href="/assets/js/48.1dbfd265.js"><link rel="prefetch" href="/assets/js/49.87f2ea7e.js"><link rel="prefetch" href="/assets/js/5.06355c1f.js"><link rel="prefetch" href="/assets/js/50.92bcf9cd.js"><link rel="prefetch" href="/assets/js/51.2b54e26b.js"><link rel="prefetch" href="/assets/js/52.ef61db16.js"><link rel="prefetch" href="/assets/js/53.e8411588.js"><link rel="prefetch" href="/assets/js/54.6f0a7cd7.js"><link rel="prefetch" href="/assets/js/55.40d0a721.js"><link rel="prefetch" href="/assets/js/56.76ff8ce6.js"><link rel="prefetch" href="/assets/js/57.cfea78e2.js"><link rel="prefetch" href="/assets/js/58.f8c35f3d.js"><link rel="prefetch" href="/assets/js/59.02cbb18a.js"><link rel="prefetch" href="/assets/js/6.d108277e.js"><link rel="prefetch" href="/assets/js/60.2df7b32b.js"><link rel="prefetch" href="/assets/js/61.16805fc4.js"><link rel="prefetch" href="/assets/js/62.ef5ca102.js"><link rel="prefetch" href="/assets/js/63.923718a5.js"><link rel="prefetch" href="/assets/js/64.d40092dd.js"><link rel="prefetch" href="/assets/js/65.d68a358c.js"><link rel="prefetch" href="/assets/js/66.b4323cbe.js"><link rel="prefetch" href="/assets/js/67.3a9004c1.js"><link rel="prefetch" href="/assets/js/68.350f6fbb.js"><link rel="prefetch" href="/assets/js/69.fdebae43.js"><link rel="prefetch" href="/assets/js/7.f0379e88.js"><link rel="prefetch" href="/assets/js/70.ccac64ba.js"><link rel="prefetch" href="/assets/js/71.8948f6c8.js"><link rel="prefetch" href="/assets/js/72.f5d07472.js"><link rel="prefetch" href="/assets/js/73.c2ddba1b.js"><link rel="prefetch" href="/assets/js/74.7a96d852.js"><link rel="prefetch" href="/assets/js/76.5eac82cb.js"><link rel="prefetch" href="/assets/js/77.49a8f94c.js"><link rel="prefetch" href="/assets/js/78.17478c01.js"><link rel="prefetch" href="/assets/js/79.545a2920.js"><link rel="prefetch" href="/assets/js/80.172aeb42.js"><link rel="prefetch" href="/assets/js/81.6376c78a.js"><link rel="prefetch" href="/assets/js/82.1dfa8f89.js"><link rel="prefetch" href="/assets/js/83.fc10680d.js"><link rel="prefetch" href="/assets/js/84.41df0212.js"><link rel="prefetch" href="/assets/js/85.b57d2894.js"><link rel="prefetch" href="/assets/js/86.1bed09b1.js"><link rel="prefetch" href="/assets/js/87.3bc2e0cf.js"><link rel="prefetch" href="/assets/js/88.5797d5a1.js"><link rel="prefetch" href="/assets/js/89.cfc4d086.js"><link rel="prefetch" href="/assets/js/9.17617c7c.js"><link rel="prefetch" href="/assets/js/90.d3796c5b.js"><link rel="prefetch" href="/assets/js/91.f9e0f122.js"><link rel="prefetch" href="/assets/js/92.8ce6ae6a.js"><link rel="prefetch" href="/assets/js/93.f1c144ce.js"><link rel="prefetch" href="/assets/js/94.1877adf1.js"><link rel="prefetch" href="/assets/js/95.41ce2c18.js"><link rel="prefetch" href="/assets/js/96.07be3e30.js"><link rel="prefetch" href="/assets/js/97.d6ecd209.js"><link rel="prefetch" href="/assets/js/98.b1431a2d.js"><link rel="prefetch" href="/assets/js/99.acea4094.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.d4c32f31.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">Half Town前端周刊</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/posts/" class="nav-link">目录</a></div><div class="nav-item"><a href="https://github.com/LSKReno" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">其他</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://weibo.com/u/5092674629" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  微博
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="http://lskreno.vip" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  LSKReno的 博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/posts/" class="nav-link">目录</a></div><div class="nav-item"><a href="https://github.com/LSKReno" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">其他</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://weibo.com/u/5092674629" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  微博
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="http://lskreno.vip" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  LSKReno的 博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/posts/" class="sidebar-link">目录</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>总结前端技术文章</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>HTML</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>CSS</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>JavaScript</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>ES6-11新特性</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>深入JavaScript系列</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Browser浏览器</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>JS-API揭秘系列</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>搞懂那个TCP</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>这个面试不太难</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>手写JS系列</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Vue大赏</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Koa大赏</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>MongoDB大赏</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>JS设计模式</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>前端安全</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>前端架构设计</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>前端模块化规范</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>操作系统</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>前端自动化测试</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Vue-cli的配置详解</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>关于</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="_004-常用koa中间件源码"><a href="#_004-常用koa中间件源码" aria-hidden="true" class="header-anchor">#</a> 004-常用Koa中间件源码</h1> <h2 id="一、koa-bodyparser源码"><a href="#一、koa-bodyparser源码" aria-hidden="true" class="header-anchor">#</a> 一、koa-bodyparser源码</h2> <p>直接上koa-bodyparser的源码：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">/**!
+ * koa-body-parser - index.js
+ * Copyright(c) 2014
+ * MIT Licensed
+ *
+ * Authors:
+ *   dead_horse &lt;dead_horse@qq.com&gt; (http://deadhorse.me)
+ *   fengmk2 &lt;m@fengmk2.com&gt; (http://fengmk2.com)
+ */</span>
+
+<span class="token string">'use strict'</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * Module dependencies.
+ */</span>
+
+<span class="token keyword">var</span> parse <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'co-body'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> copy <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'copy-to'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * @param [Object] opts
+ *   - {String} jsonLimit default '1mb'
+ *   - {String} formLimit default '56kb'
+ *   - {string} encoding default 'utf-8'
+ *   - {Object} extendTypes
+ */</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">opts</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  opts <span class="token operator">=</span> opts <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> detectJSON <span class="token operator">=</span> opts<span class="token punctuation">.</span>detectJSON<span class="token punctuation">;</span>
+  <span class="token keyword">var</span> onerror <span class="token operator">=</span> opts<span class="token punctuation">.</span>onerror<span class="token punctuation">;</span>
+
+  <span class="token keyword">var</span> enableTypes <span class="token operator">=</span> opts<span class="token punctuation">.</span>enableTypes <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token string">'json'</span><span class="token punctuation">,</span> <span class="token string">'form'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> enableForm <span class="token operator">=</span> <span class="token function">checkEnable</span><span class="token punctuation">(</span>enableTypes<span class="token punctuation">,</span> <span class="token string">'form'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> enableJson <span class="token operator">=</span> <span class="token function">checkEnable</span><span class="token punctuation">(</span>enableTypes<span class="token punctuation">,</span> <span class="token string">'json'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> enableText <span class="token operator">=</span> <span class="token function">checkEnable</span><span class="token punctuation">(</span>enableTypes<span class="token punctuation">,</span> <span class="token string">'text'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  opts<span class="token punctuation">.</span>detectJSON <span class="token operator">=</span> <span class="token keyword">undefined</span><span class="token punctuation">;</span>
+  opts<span class="token punctuation">.</span>onerror <span class="token operator">=</span> <span class="token keyword">undefined</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// force co-body return raw body</span>
+  opts<span class="token punctuation">.</span>returnRawBody <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// default json types</span>
+  <span class="token keyword">var</span> jsonTypes <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">'application/json'</span><span class="token punctuation">,</span>
+    <span class="token string">'application/json-patch+json'</span><span class="token punctuation">,</span>
+    <span class="token string">'application/vnd.api+json'</span><span class="token punctuation">,</span>
+    <span class="token string">'application/csp-report'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// default form types</span>
+  <span class="token keyword">var</span> formTypes <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">'application/x-www-form-urlencoded'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// default text types</span>
+  <span class="token keyword">var</span> textTypes <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">'text/plain'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">var</span> jsonOpts <span class="token operator">=</span> <span class="token function">formatOptions</span><span class="token punctuation">(</span>opts<span class="token punctuation">,</span> <span class="token string">'json'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> formOpts <span class="token operator">=</span> <span class="token function">formatOptions</span><span class="token punctuation">(</span>opts<span class="token punctuation">,</span> <span class="token string">'form'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> textOpts <span class="token operator">=</span> <span class="token function">formatOptions</span><span class="token punctuation">(</span>opts<span class="token punctuation">,</span> <span class="token string">'text'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">var</span> extendTypes <span class="token operator">=</span> opts<span class="token punctuation">.</span>extendTypes <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token function">extendType</span><span class="token punctuation">(</span>jsonTypes<span class="token punctuation">,</span> extendTypes<span class="token punctuation">.</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">extendType</span><span class="token punctuation">(</span>formTypes<span class="token punctuation">,</span> extendTypes<span class="token punctuation">.</span>form<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">extendType</span><span class="token punctuation">(</span>textTypes<span class="token punctuation">,</span> extendTypes<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">bodyParser</span><span class="token punctuation">(</span><span class="token parameter">ctx<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span>body <span class="token operator">!==</span> <span class="token keyword">undefined</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>disableBodyParser<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">parseBody</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token string">'parsed'</span> <span class="token keyword">in</span> res <span class="token operator">?</span> res<span class="token punctuation">.</span>parsed <span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span>rawBody <span class="token operator">===</span> <span class="token keyword">undefined</span><span class="token punctuation">)</span> ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span>rawBody <span class="token operator">=</span> res<span class="token punctuation">.</span>raw<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>onerror<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">onerror</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> ctx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> err<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">await</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">parseBody</span><span class="token punctuation">(</span><span class="token parameter">ctx</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>enableJson <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>detectJSON <span class="token operator">&amp;&amp;</span> <span class="token function">detectJSON</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">||</span> ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span>jsonTypes<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">await</span> parse<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> jsonOpts<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>enableForm <span class="token operator">&amp;&amp;</span> ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span>formTypes<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">await</span> parse<span class="token punctuation">.</span><span class="token function">form</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> formOpts<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>enableText <span class="token operator">&amp;&amp;</span> ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span>textTypes<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">await</span> parse<span class="token punctuation">.</span><span class="token function">text</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> textOpts<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token string">''</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">formatOptions</span><span class="token punctuation">(</span><span class="token parameter">opts<span class="token punctuation">,</span> type</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> res <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token function">copy</span><span class="token punctuation">(</span>opts<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  res<span class="token punctuation">.</span>limit <span class="token operator">=</span> opts<span class="token punctuation">[</span>type <span class="token operator">+</span> <span class="token string">'Limit'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">extendType</span><span class="token punctuation">(</span><span class="token parameter">original<span class="token punctuation">,</span> extend</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>extend<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>Array<span class="token punctuation">.</span><span class="token function">isArray</span><span class="token punctuation">(</span>extend<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      extend <span class="token operator">=</span> <span class="token punctuation">[</span>extend<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    extend<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">extend</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      original<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>extend<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">checkEnable</span><span class="token punctuation">(</span><span class="token parameter">types<span class="token punctuation">,</span> type</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> types<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span>type<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>根据一开始我们的猜测，应该是有<code>监听'data'事件</code>的，但是现在在koa-bodyparser的源码中我们并没有发现，所以一定是在co-body中藏着，那我们来分析下co-body的源码。</p> <p>co-body的源码：</p> <p>有以下几个文件：</p> <div class="language-js extra-class"><pre class="language-js"><code>—— index<span class="token punctuation">.</span>js <span class="token comment">// 负责暴露出对外接口</span>
+
+──lib <span class="token comment">// 核心文件</span>
+├── any<span class="token punctuation">.</span>js <span class="token comment">// </span>
+├── form<span class="token punctuation">.</span>js <span class="token comment">// </span>
+├── json<span class="token punctuation">.</span>js <span class="token comment">// 用于</span>
+├── text<span class="token punctuation">.</span>js <span class="token comment">// 用于</span>
+└── utils<span class="token punctuation">.</span>js <span class="token comment">// 用于</span>
+</code></pre></div><div class="language-js extra-class"><pre class="language-js"><code><span class="token string">'use strict'</span><span class="token punctuation">;</span>
+
+exports <span class="token operator">=</span> module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./lib/any'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+exports<span class="token punctuation">.</span>json <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./lib/json'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+exports<span class="token punctuation">.</span>form <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./lib/form'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+exports<span class="token punctuation">.</span>text <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./lib/text'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>我们发现，在co-body中还是没有发现<code>监听'data'事件</code>的代码，所以再向raw-body中分析。</p> <p>raw-body的源码：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">/*!
+ * raw-body
+ * Copyright(c) 2013-2014 Jonathan Ong
+ * Copyright(c) 2014-2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */</span>
+
+<span class="token string">'use strict'</span>
+
+<span class="token comment">/**
+ * Module dependencies.
+ * @private
+ */</span>
+
+<span class="token keyword">var</span> bytes <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'bytes'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> createError <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'http-errors'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> iconv <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'iconv-lite'</span><span class="token punctuation">)</span>
+<span class="token keyword">var</span> unpipe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'unpipe'</span><span class="token punctuation">)</span>
+
+<span class="token comment">/**
+ * Module exports.
+ * @public
+ */</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> getRawBody
+
+<span class="token comment">/**
+ * Module variables.
+ * @private
+ */</span>
+
+<span class="token keyword">var</span> <span class="token constant">ICONV_ENCODING_MESSAGE_REGEXP</span> <span class="token operator">=</span> <span class="token regex">/^Encoding not recognized: /</span>
+
+<span class="token comment">/**
+ * Get the decoder for a given encoding.
+ *
+ * @param {string} encoding
+ * @private
+ */</span>
+
+<span class="token keyword">function</span> <span class="token function">getDecoder</span> <span class="token punctuation">(</span><span class="token parameter">encoding</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>encoding<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token keyword">null</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> iconv<span class="token punctuation">.</span><span class="token function">getDecoder</span><span class="token punctuation">(</span>encoding<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// error getting decoder</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token constant">ICONV_ENCODING_MESSAGE_REGEXP</span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">throw</span> e
+
+    <span class="token comment">// the encoding was not found</span>
+    <span class="token keyword">throw</span> <span class="token function">createError</span><span class="token punctuation">(</span><span class="token number">415</span><span class="token punctuation">,</span> <span class="token string">'specified encoding unsupported'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      encoding<span class="token punctuation">:</span> encoding<span class="token punctuation">,</span>
+      type<span class="token punctuation">:</span> <span class="token string">'encoding.unsupported'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">/**
+ * Get the raw body of a stream (typically HTTP).
+ *
+ * @param {object} stream
+ * @param {object|string|function} [options]
+ * @param {function} [callback]
+ * @public
+ */</span>
+
+<span class="token keyword">function</span> <span class="token function">getRawBody</span> <span class="token punctuation">(</span><span class="token parameter">stream<span class="token punctuation">,</span> options<span class="token punctuation">,</span> callback</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> done <span class="token operator">=</span> callback
+  <span class="token keyword">var</span> opts <span class="token operator">=</span> options <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>options <span class="token operator">===</span> <span class="token boolean">true</span> <span class="token operator">||</span> <span class="token keyword">typeof</span> options <span class="token operator">===</span> <span class="token string">'string'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// short cut for encoding</span>
+    opts <span class="token operator">=</span> <span class="token punctuation">{</span>
+      encoding<span class="token punctuation">:</span> options
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> options <span class="token operator">===</span> <span class="token string">'function'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    done <span class="token operator">=</span> options
+    opts <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// validate callback is a function, if provided</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>done <span class="token operator">!==</span> <span class="token keyword">undefined</span> <span class="token operator">&amp;&amp;</span> <span class="token keyword">typeof</span> done <span class="token operator">!==</span> <span class="token string">'function'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">TypeError</span><span class="token punctuation">(</span><span class="token string">'argument callback must be a function'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// require the callback without promises</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>done <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>global<span class="token punctuation">.</span>Promise<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">TypeError</span><span class="token punctuation">(</span><span class="token string">'argument callback is required'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// get encoding</span>
+  <span class="token keyword">var</span> encoding <span class="token operator">=</span> opts<span class="token punctuation">.</span>encoding <span class="token operator">!==</span> <span class="token boolean">true</span>
+    <span class="token operator">?</span> opts<span class="token punctuation">.</span>encoding
+    <span class="token punctuation">:</span> <span class="token string">'utf-8'</span>
+
+  <span class="token comment">// convert the limit to an integer</span>
+  <span class="token keyword">var</span> limit <span class="token operator">=</span> bytes<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>opts<span class="token punctuation">.</span>limit<span class="token punctuation">)</span>
+
+  <span class="token comment">// convert the expected length to an integer</span>
+  <span class="token keyword">var</span> length <span class="token operator">=</span> opts<span class="token punctuation">.</span>length <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token function">isNaN</span><span class="token punctuation">(</span>opts<span class="token punctuation">.</span>length<span class="token punctuation">)</span>
+    <span class="token operator">?</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>opts<span class="token punctuation">.</span>length<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+    <span class="token punctuation">:</span> <span class="token keyword">null</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>done<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// classic callback style</span>
+    <span class="token keyword">return</span> <span class="token function">readStream</span><span class="token punctuation">(</span>stream<span class="token punctuation">,</span> encoding<span class="token punctuation">,</span> length<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> done<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token function">executor</span> <span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">readStream</span><span class="token punctuation">(</span>stream<span class="token punctuation">,</span> encoding<span class="token punctuation">,</span> length<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token function">onRead</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> buf</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token function">reject</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+      <span class="token function">resolve</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">/**
+ * Halt a stream.
+ *
+ * @param {Object} stream
+ * @private
+ */</span>
+
+<span class="token keyword">function</span> <span class="token function">halt</span> <span class="token punctuation">(</span><span class="token parameter">stream</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// unpipe everything from the stream</span>
+  <span class="token function">unpipe</span><span class="token punctuation">(</span>stream<span class="token punctuation">)</span>
+
+  <span class="token comment">// pause stream</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> stream<span class="token punctuation">.</span>pause <span class="token operator">===</span> <span class="token string">'function'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    stream<span class="token punctuation">.</span><span class="token function">pause</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">/**
+ * Read the data from the stream.
+ *
+ * @param {object} stream
+ * @param {string} encoding
+ * @param {number} length
+ * @param {number} limit
+ * @param {function} callback
+ * @public
+ */</span>
+
+<span class="token keyword">function</span> <span class="token function">readStream</span> <span class="token punctuation">(</span><span class="token parameter">stream<span class="token punctuation">,</span> encoding<span class="token punctuation">,</span> length<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> callback</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> complete <span class="token operator">=</span> <span class="token boolean">false</span>
+  <span class="token keyword">var</span> sync <span class="token operator">=</span> <span class="token boolean">true</span>
+
+  <span class="token comment">// check the length and limit options.</span>
+  <span class="token comment">// note: we intentionally leave the stream paused,</span>
+  <span class="token comment">// so users should handle the stream themselves.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>limit <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> length <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> length <span class="token operator">&gt;</span> limit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span><span class="token function">createError</span><span class="token punctuation">(</span><span class="token number">413</span><span class="token punctuation">,</span> <span class="token string">'request entity too large'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      expected<span class="token punctuation">:</span> length<span class="token punctuation">,</span>
+      length<span class="token punctuation">:</span> length<span class="token punctuation">,</span>
+      limit<span class="token punctuation">:</span> limit<span class="token punctuation">,</span>
+      type<span class="token punctuation">:</span> <span class="token string">'entity.too.large'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// streams1: assert request encoding is buffer.</span>
+  <span class="token comment">// streams2+: assert the stream encoding is buffer.</span>
+  <span class="token comment">//   stream._decoder: streams1</span>
+  <span class="token comment">//   state.encoding: streams2</span>
+  <span class="token comment">//   state.decoder: streams2, specifically &lt; 0.10.6</span>
+  <span class="token keyword">var</span> state <span class="token operator">=</span> stream<span class="token punctuation">.</span>_readableState
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>stream<span class="token punctuation">.</span>_decoder <span class="token operator">||</span> <span class="token punctuation">(</span>state <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>state<span class="token punctuation">.</span>encoding <span class="token operator">||</span> state<span class="token punctuation">.</span>decoder<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// developer error</span>
+    <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span><span class="token function">createError</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token string">'stream encoding should not be set'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      type<span class="token punctuation">:</span> <span class="token string">'stream.encoding.set'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">var</span> received <span class="token operator">=</span> <span class="token number">0</span>
+  <span class="token keyword">var</span> decoder
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    decoder <span class="token operator">=</span> <span class="token function">getDecoder</span><span class="token punctuation">(</span>encoding<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">var</span> buffer <span class="token operator">=</span> decoder
+    <span class="token operator">?</span> <span class="token string">''</span>
+    <span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+  <span class="token comment">// attach listeners</span>
+  stream<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'aborted'</span><span class="token punctuation">,</span> onAborted<span class="token punctuation">)</span>
+  stream<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'close'</span><span class="token punctuation">,</span> cleanup<span class="token punctuation">)</span>
+  stream<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> onData<span class="token punctuation">)</span>
+  stream<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> onEnd<span class="token punctuation">)</span>
+  stream<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">,</span> onEnd<span class="token punctuation">)</span>
+
+  <span class="token comment">// mark sync section complete</span>
+  sync <span class="token operator">=</span> <span class="token boolean">false</span>
+
+  <span class="token keyword">function</span> <span class="token function">done</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> args <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Array</span><span class="token punctuation">(</span>arguments<span class="token punctuation">.</span>length<span class="token punctuation">)</span>
+
+    <span class="token comment">// copy arguments</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> args<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      args<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> arguments<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// mark complete</span>
+    complete <span class="token operator">=</span> <span class="token boolean">true</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>sync<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      process<span class="token punctuation">.</span><span class="token function">nextTick</span><span class="token punctuation">(</span>invokeCallback<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token function">invokeCallback</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">function</span> <span class="token function">invokeCallback</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">cleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// halt the stream on error</span>
+        <span class="token function">halt</span><span class="token punctuation">(</span>stream<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token function">callback</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">function</span> <span class="token function">onAborted</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>complete<span class="token punctuation">)</span> <span class="token keyword">return</span>
+
+    <span class="token function">done</span><span class="token punctuation">(</span><span class="token function">createError</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token string">'request aborted'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      code<span class="token punctuation">:</span> <span class="token string">'ECONNABORTED'</span><span class="token punctuation">,</span>
+      expected<span class="token punctuation">:</span> length<span class="token punctuation">,</span>
+      length<span class="token punctuation">:</span> length<span class="token punctuation">,</span>
+      received<span class="token punctuation">:</span> received<span class="token punctuation">,</span>
+      type<span class="token punctuation">:</span> <span class="token string">'request.aborted'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">function</span> <span class="token function">onData</span> <span class="token punctuation">(</span><span class="token parameter">chunk</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>complete<span class="token punctuation">)</span> <span class="token keyword">return</span>
+
+    received <span class="token operator">+=</span> chunk<span class="token punctuation">.</span>length
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>limit <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> received <span class="token operator">&gt;</span> limit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">done</span><span class="token punctuation">(</span><span class="token function">createError</span><span class="token punctuation">(</span><span class="token number">413</span><span class="token punctuation">,</span> <span class="token string">'request entity too large'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        limit<span class="token punctuation">:</span> limit<span class="token punctuation">,</span>
+        received<span class="token punctuation">:</span> received<span class="token punctuation">,</span>
+        type<span class="token punctuation">:</span> <span class="token string">'entity.too.large'</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>decoder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      buffer <span class="token operator">+=</span> decoder<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>chunk<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      buffer<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>chunk<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">function</span> <span class="token function">onEnd</span> <span class="token punctuation">(</span><span class="token parameter">err</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>complete<span class="token punctuation">)</span> <span class="token keyword">return</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>length <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> received <span class="token operator">!==</span> length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">done</span><span class="token punctuation">(</span><span class="token function">createError</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">,</span> <span class="token string">'request size did not match content length'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+        expected<span class="token punctuation">:</span> length<span class="token punctuation">,</span>
+        length<span class="token punctuation">:</span> length<span class="token punctuation">,</span>
+        received<span class="token punctuation">:</span> received<span class="token punctuation">,</span>
+        type<span class="token punctuation">:</span> <span class="token string">'request.size.invalid'</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">var</span> string <span class="token operator">=</span> decoder
+        <span class="token operator">?</span> buffer <span class="token operator">+</span> <span class="token punctuation">(</span>decoder<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token string">''</span><span class="token punctuation">)</span>
+        <span class="token punctuation">:</span> Buffer<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span>
+      <span class="token function">done</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> string<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">function</span> <span class="token function">cleanup</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    buffer <span class="token operator">=</span> <span class="token keyword">null</span>
+
+    stream<span class="token punctuation">.</span><span class="token function">removeListener</span><span class="token punctuation">(</span><span class="token string">'aborted'</span><span class="token punctuation">,</span> onAborted<span class="token punctuation">)</span>
+    stream<span class="token punctuation">.</span><span class="token function">removeListener</span><span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">,</span> onData<span class="token punctuation">)</span>
+    stream<span class="token punctuation">.</span><span class="token function">removeListener</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> onEnd<span class="token punctuation">)</span>
+    stream<span class="token punctuation">.</span><span class="token function">removeListener</span><span class="token punctuation">(</span><span class="token string">'error'</span><span class="token punctuation">,</span> onEnd<span class="token punctuation">)</span>
+    stream<span class="token punctuation">.</span><span class="token function">removeListener</span><span class="token punctuation">(</span><span class="token string">'close'</span><span class="token punctuation">,</span> cleanup<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">最后更新时间: </span> <span class="time">5/27/2020, 10:57:24 PM</span></div></footer> <!----> </main></div><div class="global-ui"><!----><!----></div></div>
+    <script src="/assets/js/app.b1906b97.js" defer></script><script src="/assets/js/2.bdee5faf.js" defer></script><script src="/assets/js/75.d452b4b5.js" defer></script><script src="/assets/js/8.e132ed9d.js" defer></script>
+  </body>
+</html>
