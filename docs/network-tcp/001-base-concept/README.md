@@ -1,4 +1,4 @@
-# 基础概念扫盲
+# 基础概念
 先扫盲：
 
 frame对应mac，packet对应ip，datagram对应udp，segment对应tcp，message对应app。
@@ -14,19 +14,6 @@ frame对应mac，packet对应ip，datagram对应udp，segment对应tcp，message
 7. SYN攻击是什么？
 8. 挥手为什么需要四次？
 9. 四次挥手释放连接时，等待2MSL的意义?
-
-<img src="https://lskreno.oss-cn-beijing.aliyuncs.com/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/1.jpg" style="zoom: 50%;" />
-
-<img src="https://lskreno.oss-cn-beijing.aliyuncs.com/%E5%8D%9A%E5%AE%A2%E5%9B%BE%E7%89%87/2.jpg" style="zoom: 50%;" />
-
-
-这篇文章的思维导图:
-
-![img](https://pic3.zhimg.com/80/v2-dbbdb2ba824a121f18a66059ac0b5ac2_720w.jpg)
-
-
-
-TCP 作为传输层的协议，是一个软件工程师素养的体现，也是面试中经常被问到的知识点。在此，我将 TCP 核心的一些问题梳理了一下，希望能帮到各位。
 
 随着对网络的理解深入，明白TCP报文是交由IP网络来负责运输，IP网络并不能保证TCP报文到达目的地，既然IP网络是指望不上了，那TCP就自力更生吧，TCP必须依赖自身的努力来保证数据传输的可靠。
 
