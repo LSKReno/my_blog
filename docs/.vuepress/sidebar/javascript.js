@@ -4,9 +4,8 @@ module.exports = {
 	collapsable: true, // 可选的, 默认值是 true,
 	sidebarDepth: 3, // 可选的, 默认值是 1
 	children: [
-    '/javascript/dombom/',
+		'/javascript/dombom/',
 		'/javascript/typescript/',
-    '/javascript/003-type-conversion/',
 		'/javascript/utils/',
 	]
 }

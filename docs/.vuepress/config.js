@@ -87,7 +87,7 @@ module.exports = {
 			sidebars.network_tcp_sidebar,
 			sidebars.interview_sidebar,
 			sidebars.js_hand_sidebar,
-			sidebars.vue_sidebar,
+			// sidebars.vue_sidebar,
 			sidebars.koa_sidebar,
 			sidebars.mongodb_sidebar,
 			sidebars.js_design_pattern_sidebar,
@@ -95,7 +95,7 @@ module.exports = {
 			sidebars.framework_design_sidebar,
 			sidebars.module_standard_sidebar,
 			sidebars.os_sidebar,
-			sidebars.automated_test_sidebar,
+			// sidebars.automated_test_sidebar,
 			sidebars.vue_cli_sidebar,
 			{
 				title: '关于', // 必要的

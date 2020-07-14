@@ -1,4 +1,4 @@
-# 004:JavaScript七大继承完爆面试
+# 004:JavaScript 继承
 
 <motto></motto>
 

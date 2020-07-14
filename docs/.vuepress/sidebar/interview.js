@@ -13,5 +13,6 @@ module.exports = {
 		'/interview/007-regexp/',
 		'/interview/008-0.3=0.1+0.2/',
 		'/interview/009-eventmodel/',
+		'/interview/010-deepclone/',
 	]
 }

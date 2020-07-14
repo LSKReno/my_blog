@@ -6,9 +6,9 @@ module.exports = {
 	children: [
 		'/browser/001-caching-mechanism/',
 		'/browser/002-process-thread/',
-		'/browser/003-url-to-display/001-network/',
-		'/browser/003-url-to-display/002-analytical-algorithm/',
+		// '/browser/003-url-to-display/001-network/',
+		// '/browser/003-url-to-display/002-analytical-algorithm/',
 		'/browser/003-url-to-display/appendix/',
-		'/browser/004-pwa/',
+		// '/browser/004-pwa/',
 	]
 }

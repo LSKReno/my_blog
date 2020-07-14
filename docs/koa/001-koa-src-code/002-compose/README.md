@@ -31,12 +31,12 @@ module.exports = compose
  * Compose `middleware` returning
  * a fully valid middleware comprised
  * of all those which are passed.
- * 
+ *
  * 组成“中间件”
  * 返回一个完全有效的中间件，
  * 该中间件由所有传递进来的中间件组成
  * （前面也说了中间件是在application.js里通过use方法push进middleware数组里的）
- * 
+ *
  * @param {Array} middleware
  * @return {Function}
  * @api public
@@ -58,8 +58,8 @@ function compose(middleware) {
     // 返回一个函数闭包, 保持对 middleware 的引用
     return function(context, next) {
         // 解释一下传入的 next
-        // 这个传入的 next 函数是在所有中间件执行后的"最后"一个函数, 
-        // 这里的"最后"并不是真正的最后,而是像上面那个图中的圆心, 
+        // 这个传入的 next 函数是在所有中间件执行后的"最后"一个函数,
+        // 这里的"最后"并不是真正的最后,而是像上面那个图中的圆心,
         // 执行完圆心之后, 会返回去执行上一个中间件函数(middleware[length - 1])剩下的逻辑
 
         // index 是用来记录中间件函数运行到了哪一个函数
@@ -69,31 +69,36 @@ function compose(middleware) {
 
         // 声明dispatch函数
         function dispatch(i) {
-            // i 是洋葱模型的记录已经运行的函数中间件的下标, 
+            // i 是洋葱模型的记录该运行的函数中间件的下标,
             // 如果一个中间件里面运行两次 next, 那么 i 是会比 index 小的;
-            
+
             // index存在的意义就是为了防止next()多次调用
+            // 为什么能够防止呢？
+            // 因为啊,我们可以看到下面有一行是 index = i
+            // 第一次调用 next() 后,也就意味着  index 会等于 i,
+            // 所以再次调用的话就会进入到 下面的 if 情况中
             if (i <= index) {
                 return Promise.reject(new Error('next() called multiple times'))
             }
             index = i
             // 拿出middleware第i个中间件函数，赋值给fn
-            let fn = middleware[i] 
+            let fn = middleware[i]
             // 判断如果i等于middleware的长度，就把next赋值给fn
-            if (i === middleware.length) { 
-                // 这里的 next 就是一开始 compose 传入的 next, 
+            if (i === middleware.length) {
+                // 这里的 next 就是一开始 compose 传入的 next,
                 // 意味着当中间件函数数列执行完后, 执行这个 next 函数, 即圆心
-                fn = next 
+                fn = next
             }
             // 如果没有函数, 直接返回状态为resolve且为空值的的Promise
+			//没有函数也就意味着没有圆心函数，反正 koa 的源码中是没有传
             if (!fn) {
                 return Promise.resolve()
             }
             try {
-                // 为什么这里要包一层 Promise? 
-                // 因为 async 需要后面是 Promise, 
-                // 然后中间件中的 next 函数的返回值就是 dispatch 函数的返回值, 
-                // 所以运行 async next(); 需要 next 包一层 Promise
+                // 为什么这里要包一层 Promise?
+                // 因为 await 需要后面是 Promise,
+                // 然后中间件中的 next 函数的返回值就是 dispatch 函数的返回值,
+                // 所以运行 await next(); 需要 next 包一层 Promise
                 // 所以next 函数是固定的, 可以执行下一个函数
                 // 执行fn(context, dispatch.bind(null, i + 1))这个中间件函数，
                 // 然后递归调用下一个中间件
@@ -119,6 +124,9 @@ compose函数接收middleware数组作为参数，middleware中每个对象都�
 这是为什么呢？
 
 我猜测，应该是因为虽然Koa的源码中并没有传入这个next参数,但是我们在正常的代码编写中如果有需要是可以进行传入的。
+
+同时，在koa中所有的中间件的编写都是有 ctx 和 next 这两个参数，所以在这里使用 next 作为参数名也是为了统一整个 koa 框架的代码风格。
+
 
 **栗子：**
 
@@ -222,7 +230,7 @@ compose_middleware(app.context, function() {
 {
     index: -1,
     i: 0,
-    index: 0    
+    index: 0
 }
 // 执行了await next()
 // 第二阶段
@@ -270,7 +278,7 @@ app.listen(3000)
 1. 首先，因为调用了app实例的 `use()` 方法，所以在middleware数组中已经有了上面的两个函数了。
 2. 在 `listen()` 方法中调用了 `callback()` 方法。(当执行完app.use时，服务还没启动，只有当执行到app.listen(3000)时，程序才真正启动。)
 3. 然后又在 `callback()` 方法中调用了 `compose(middleware)` 方法并将**返回的函数**赋值给了fn。
-4. 接着在 `callback()` 中又调用了 `handleRequest(ctx, fnMiddleware)` 方法，并将 **context**（使用了 `createContext()` 方法增强）和 上面compose方法返回的 **fn** 分别作为 **ctx** 和 **fnMiddleware** 这两个参数传入handleRequest方法。 
+4. 接着在 `callback()` 中又调用了 `handleRequest(ctx, fnMiddleware)` 方法，并将 **context**（使用了 `createContext()` 方法增强）和 上面compose方法返回的 **fn** 分别作为 **ctx** 和 **fnMiddleware** 这两个参数传入handleRequest方法。
 5. 接着在handleRequest()方法中执行了 `fnMiddleware(ctx)` 。
 
 6. `fnMiddleware(ctx)` 这个函数就是 `compose(middleware)` 的返回值。
@@ -297,11 +305,11 @@ compose函数接收middle对象作为参数，将middleware数组中的中间件
 13. 进入到next函数后，由于next()函数就是 `dispatch.bind(null, 1 + 1)` ，主要是执行dispatch(2)，于是老的dispatch(1)函数压栈，开始从头开始执行dispatch(2)
 14. 然后dispatch(2)中执行 `let fn = middleware[i]` ，我们会发现，fn此时是`undefined`，因为已经没有中间件函数可以让我们使用啦。
 15. 然后，因为 i 等于 middleware.length，所以`fn = next`，但是在Koa的源码中并没有传入next这个函数，所以next是undefined，所以此时fn依然被赋值为`undefined`。
-16. 然后，下一步，因为fn是`undefined`，所以执行 `if (!fn) return Promise.resolve()` 
+16. 然后，下一步，因为fn是`undefined`，所以执行 `if (!fn) return Promise.resolve()`
 17. 所以返回Promise.resolve()，此时第二个中间件的next函数返回了。
-18. 接下来执行 `console.log("4")` 
-19. 由此第二个中间件执行完成，把程序控制权传递给第一个中间件。 
-20. 第一个中间件执行 `console.log("2")` 
+18. 接下来执行 `console.log("4")`
+19. 由此第二个中间件执行完成，把程序控制权传递给第一个中间件。
+20. 第一个中间件执行 `console.log("2")`
 
 最终执行完所有中间件。输出为:
 

@@ -8,6 +8,7 @@ module.exports = {
 		'/deep-in-js/002-js-prototype/',
 		'/deep-in-js/003-js-extends/',
 		'/deep-in-js/004-js-variable-function-promotion/',
-		// '/deep-in-js/005-js-type-conversion/',
+		'/deep-in-js/005-js-type-conversion/',
+		'/deep-in-js/006-js-regexp/',
 	]
 }

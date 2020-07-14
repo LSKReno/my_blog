@@ -10,7 +10,7 @@
 >
 > **整个过程实际就是在对*请求信息*进行信息获取及判断 和 对*回应信息*进行数据的逻辑及添加的处理**
 
-context使用node原生的http监听回调函数中的req、res来进一步封装，意味着对于**每一个http请求**，koa**都会创建一个context**并**共享给所有的全局中间件使用**，当所有的中间件执行完后，会将所有的数据**统一交给res**进行**返回**。所以，在每个中间件中我们才能取得req的数据进行处理，最后ctx再把要返回的body给res进行返回。
+context使用node原生的http监听回调函数中的req、res来进一步封装，意味着对于**每一个http请求**，koa**都会创建一个context**并**共享给所有的全局中间件使用**，当所有的中间件执行完后，会将所有的数据**统一交给res**进行**返回**。所以，我们才能在每个中间件中取得req的数据进行处理，最后ctx再把要返回的body给res进行返回。
 
 **请记住句话：每一个请求都有唯一一个context对象，所有的关于请求和响应的东西都放在其里面。**
 
@@ -43,49 +43,50 @@ const debug = require('debug')('koa:application');
 const onFinished = require('on-finished'); // 当HTTP请求关闭、完成或出现错误时执行回调。
 const response = require('./response'); // Koa源码文件
 // 实现基于async/await的洋葱式调用顺序的中间件容器的关键函数
-const compose = require('koa-compose'); 
+const compose = require('koa-compose');
 const context = require('./context'); // Koa源码文件
 const request = require('./request'); // Koa源码文件
 const statuses = require('statuses');
 // Node的基础库，koa应用集成于它，主要用了其事件机制，来实现异常的处理
-const Emitter = require('events'); 
+const Emitter = require('events');
 const util = require('util');
 const Stream = require('stream');
 const http = require('http'); // node实现web服务器功能的核心库
 const only = require('only'); // only函数用于返回所传入对象的白名单属性
 // 为了支持koa1的generator中间件写法，对于使用generator函数实现的中间件函数，
 // 需要通过koa-convert转换为类async函数
-const convert = require('koa-convert'); 
+const convert = require('koa-convert');
 const deprecate = require('depd')('koa');
 const {
     HttpError
 } = require('http-errors');
 
-// 我们new一个Koa对象，实质上就是new一个Application的实例对象, 
-// 而且由于Application类是继承于EventEmitter(Node.js events模块)的, 
+// 我们new一个Koa对象，实质上就是new一个Application的实例对象,
+// 而且由于Application类是继承于EventEmitter(Node.js events模块)的,
 // 所以我们在Koa实例对象上可以使用on, emit等方法进行事件监听
-module.exports = class Application extends Emitter { 
+module.exports = class Application extends Emitter {
     constructor(options) {
         super();
         options = options || {};
         // proxy是代理设置,proxy属性值是true或者false，
         // 它的作用在于是否获取真正的客户端ip地址。
         // 如果为 true，则解析 "Host" 的 header 域，并支持 X-Forwarded-Host
-        this.proxy = options.proxy || false; 
+        this.proxy = options.proxy || false;
         // 子域名偏移量设置，用于改变获取subdomain时返回数组的值。
-        // 比如，test.blog.foo.com 域名, 如果设置 subdomainOffset 为 2, 
+        // 比如，test.blog.foo.com 域名, 如果设置 subdomainOffset 为 2,
         // 那么返回的数组值为 ["blog", "test"], 如果设置为 3, 那么返回数组值为 ["test"]
-        this.subdomainOffset = options.subdomainOffset || 2; 
+        this.subdomainOffset = options.subdomainOffset || 2;
         this.proxyIpHeader = options.proxyIpHeader || 'X-Forwarded-For';
         this.maxIpsCount = options.maxIpsCount || 0;
         // 保存Node的环境变量NODE_ENV值
-        this.env = options.env || process.env.NODE_ENV || 'development'; 
+        this.env = options.env || process.env.NODE_ENV || 'development';
+        // 这里的 keys 会在 context.js 中的 cookie 的 getter 中进行使用
         if (options.keys) this.keys = options.keys;
         this.middleware = []; // 该数组存放所有通过use函数引入的中间件函数
         // Object.create(parent)方法主要用于创建一个新对象，并将parent设置为新对象的原型
         // 创建context、request、response对象，
         // 新创建的对象分别拥有了context,request,response的原型方法
-        this.context = Object.create(context); 
+        this.context = Object.create(context);
         this.request = Object.create(request);
         this.response = Object.create(response);
         if (util.inspect.custom) {
@@ -168,10 +169,10 @@ module.exports = class Application extends Emitter {
         // listenerCount函数是node的Emitter模块的方法，用于返回注册了指定事件的监听器数量
         // 如果没有error事件的监听器，就直接创建一个监听器，
         // 这个地方的onerror函数是application.js中Application类的方法
-        if (!this.listenerCount('error')) this.on('error', this.onerror); 
+        if (!this.listenerCount('error')) this.on('error', this.onerror);
         // handleRequest函数即处理请求用的，
         // 会作为参数传递给上文listen函数中的http.createServer函数，
-        // 它就相当于http.creatServer的回调函数, 有 req, res 两个参数, 
+        // 它就相当于http.creatServer的回调函数, 有 req, res 两个参数,
         // 分别代表原生Node的request, response对象.
         const handleRequest = (req, res) => {
             // 基于req和res，对现有的context、request、response进行增强封装
@@ -197,30 +198,30 @@ module.exports = class Application extends Emitter {
         const res = ctx.res;
         res.statusCode = 404;
         // 错误处理: 调用的是context.js中的onerror，下面会分析它的源码
-        const onerror = err => ctx.onerror(err); 
-        const handleResponse = () => respond(ctx); // 处理响应内容 
-        
+        const onerror = err => ctx.onerror(err);
+        const handleResponse = () => respond(ctx); // 处理响应内容
+
         // on-finished这个包，主要就是 当HTTP请求关闭、完成或出现错误时执行回调。
         // onFinished(res, listener)函数是on-finished这个包导出的函数，
         // 其实就是给res挂载一个listener侦听器来侦听要完成的响应。
         // 当响应关闭、完成和报错时，listener侦听器将只被调用一次。
         // 如果对出现错误的响应结束，第一个参数将包含错误。如果响应已经完成，将调用listener侦听器。
         // 在侦听到响应结束时，将关闭与响应相关的内容，比如打开的文件将被强制关闭。
-        // Listener被调用为 `Listener(err, res)` 
-        
-        // 这里是为res对象添加错误处理响应, 
+        // Listener被调用为 `Listener(err, res)`
+
+        // 这里是为res对象添加错误处理响应,
         // 当res响应结束时, 执行onerror这个回调函数函数。
         // 注意:该处的onerror并非Application类的方法，而是context.js中的onerror
-        onFinished(res, onerror); 
+        onFinished(res, onerror);
         // 下面是中间件执行、统一错误处理机制的关键
         // 执行fnMiddleware这个函数也就是执行在callback()方法中compose函数返回的函数，
         // 也就是执行中间件数组所有函数，实际就是在执行一层一层地执行那些中间件，
         // 最后若无任何异常则返回出来Promise.resolve()，
         // 执行fnMiddleware(ctx)后面的 `then(handleResponse)` 回调；
         // 若有异常，则返回Promise.reject(err), 执行 `catch(onerror)` 回调。
-        return fnMiddleware(ctx).then(handleResponse).catch(onerror); 
-        // 注意:该处的onerror并非Application类的方法，而是context.js中的onerror, 
-        // context.js中的onerror的核心是在 this.app.emit('error', err, this); 
+        return fnMiddleware(ctx).then(handleResponse).catch(onerror);
+        // 注意:该处的onerror并非Application类的方法，而是context.js中的onerror,
+        // context.js中的onerror的核心是在 this.app.emit('error', err, this);
         // this.app就是对application的引用，当context.js的onerror触发时，
         // 会触发application实例的error事件。
         // 所以，我们可以在app.js中对koa实例app进行统一错误监听
@@ -237,13 +238,13 @@ module.exports = class Application extends Emitter {
     // 基于req和res对象，增强封装context、request和response对象
     // 其实就是给context对象挂载了app对象，req对象(就是Node原生req)，
     // res对象(就是Node原生res)，originalUrl还有state对象的引用
-    
+
     // 以及给request和response对象挂载了app对象，ctx对象(就是context)的引用，
     // 并在给request对象下挂载了response对象的引用，和在response对象下挂载了request对象的引用。
-    
-    // 不管在哪里出现，req就是Node原生的req，res就是Node原生的res; 
+
+    // 不管在哪里出现，req就是Node原生的req，res就是Node原生的res;
     // request就是Koa增强封装后的request，response就是Koa增强封装后的response
-    
+
     // Object.create(parent)方法主要用于创建一个新对象，并将parent设置为新对象的原型
     createContext(req, res) {
         const context = Object.create(this.context);
@@ -261,7 +262,7 @@ module.exports = class Application extends Emitter {
         // 可用于通过中间件传递信息和前端视图,
         // 例如:ctx.state.user = await User.find(id);
         // 将user属性存放到ctx.state对象里，以便能够被另一个中间件读取。
-        context.state = {}; 
+        context.state = {};
         return context;
         // 为什么app、req、res、ctx也存放在了request、和response对象中呢？
         // 答：
@@ -358,7 +359,7 @@ function respond(ctx) {
 
 /**
  * Make HttpError available to consumers of the library so that consumers don't
- * have a direct dependency upon `http-errors` 
+ * have a direct dependency upon `http-errors`
  */
 // 让HttpError对Koa的使用者可用，这样使用者就不会直接依赖于“http-error”包
 module.exports.HttpError = HttpError;
@@ -479,7 +480,7 @@ const proto = module.exports = {
     // 默认的错误处理
     onerror(err) {
         // don't do anything if there is no error.
-        // this allows you to pass `this.onerror` 
+        // this allows you to pass `this.onerror`
         // to node-style callbacks.
         // 没有错误就直接返回
         if (null == err) return;
@@ -495,10 +496,10 @@ const proto = module.exports = {
         // delegate
         // emit就是Emitter的一个方法，因为Application类继承了Emitter，所以app这个实例可以使用emit方法
         // emit方法就是，发射event事件，传递若干可选参数到事件监听器的参数表
-        
+
         // this.app就是对application的引用，
         // 当context.js的onerror触发时，会触发application实例的error事件
-        this.app.emit('error', err, this); 
+        this.app.emit('error', err, this);
 
         // nothing we can do here other
         // than delegate to the app-level
@@ -545,6 +546,8 @@ const proto = module.exports = {
     },
 
     get cookies() {
+        // app 实例上没有 cookies的话就根据
+        // 创建 web 服务器时传入的 options 中的 keys new 一个出来
         if (!this[COOKIES]) {
             this[COOKIES] = new Cookies(this.req, this.res, {
                 keys: this.app.keys,
@@ -579,7 +582,8 @@ if (util.inspect.custom) {
 // 因为常常我们认为会在ctx.request或者是ctx.response中出现的属性，
 // 却可以使用ctx.headers或者ctx.url这样的直接进行调用
 
-// 原因就在下面了，使用了代理。也就是ctx可以相当于ctx.request和ctx.response
+// 原因就在下面了，使用了代理。也就是设计模式中的代理模式
+// 也就是 ctx 可以相当于 ctx.request 和 ctx.response
 delegate(proto, 'response')
     .method('attachment')
     .method('redirect')
@@ -660,7 +664,7 @@ function Delegator(proto, target) {
     // 则调用 new Delegator(proto, target)。
     // 通过这种方式，可以避免在调用初始化函数时忘记写 new 造成的问题，
     // 我们可以看到的是，context.js 中也足够任性，确实是没写 new 。。。
-    // 因为此时下面两种写法是等价的: 
+    // 因为此时下面两种写法是等价的:
     // let d = new Delegator(proto, 'request')
     // let d = Delegator(proto, 'request')
     if (!(this instanceof Delegator)) return new Delegator(proto, target);
@@ -724,10 +728,10 @@ Delegator.prototype.getter = function(name) {
     this.getters.push(name);
     // 原生的obj.__defineGetter__(prop, func)，prop是一个字符串，
     // 表示指定的属性名；func是一个函数，当 prop 属性的值被读取时自动被调用。
-    
-    // 调用原生的 __defineGetter__ 方法进行 getter 代理, 
+
+    // 调用原生的 __defineGetter__ 方法进行 getter 代理,
     // 那么 proto[name] 就相当于 proto[target][name]
-    
+
     // 而 context.response 就相当于 response 对象
     // 由此实现属性代理
     // 需要注意的是尽管 __defineGetter__ 曾被广泛使用，
@@ -736,7 +740,7 @@ Delegator.prototype.getter = function(name) {
     // Object.defineProperty(proto, 'url', {
     //    value: 'www.foo.com',
     // });
-    // 
+    //
     // Object.defineProperty(proto, 'url', {
     //  get() {
     //    return 'www.bar.com';
@@ -767,10 +771,10 @@ Delegator.prototype.setter = function(name) {
     this.setters.push(name);
     // 原生的obj.__defineSetter__(prop, func)，prop是一个字符串，
     // 表示指定的属性名；func是一个函数，当试图给 prop 属性的值赋值时，将自动被调用。
-    
-    // 调用原生的 __defineSetter__ 方法进行 setter 代理, 
+
+    // 调用原生的 __defineSetter__ 方法进行 setter 代理,
     // 那么 proto[name] 就相当于 proto[target][name]
-    
+
     // 而 context.response 就相当于 response 对象
     // 由此实现属性代理
     // 需要注意的是尽管 __defineSetter__ 曾被广泛使用，但是如今已不被推荐，

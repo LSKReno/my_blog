@@ -4,16 +4,11 @@
 
 > Event Loop 超棒演讲视频
 
-<video style="width:40vw;" src="https://outin-2da6e967af7111ea960800163e1a65b6.oss-cn-shanghai.aliyuncs.com/sv/27b2aecf-172bac29ecc/27b2aecf-172bac29ecc.mp4?Expires=1592295614&OSSAccessKeyId=LTAIVVfYx6D0HeL2&Signature=P8qULn%2F%2BTfn%2FBMy1uVkAsb3qGfM%3D" controls="controls">
+<video style="width:40vw; " src="https://outin-2da6e967af7111ea960800163e1a65b6.oss-cn-shanghai.aliyuncs.com/sv/27b2aecf-172bac29ecc/27b2aecf-172bac29ecc.mp4?Expires=1592295614&OSSAccessKeyId=LTAIVVfYx6D0HeL2&Signature=P8qULn%2F%2BTfn%2FBMy1uVkAsb3qGfM%3D" controls="controls">
 your browser does not support the video tag
 </video>
 
 ## 思维导图
-
-1. 基本知识点，宏任务、微任务有哪些
-2. 事件循环机制过程，边说边画图出来
-3. 说async/await执行顺序注意，可以把 chrome 的优化，做法其实是违法了规范的，V8 团队的PR这些自信点说出来，显得你很好学，理解得很详细，很透彻。
-4. 把node的事件循环也说一下，重复1、2、3点，node中的第3点要说的是node11前后的事件循环变动点。
 
 Event Loop 过程
 
@@ -41,7 +36,7 @@ Event Loop 过程
 
    假设 JavaScript 有两个线程，一个线程在某个 DOM 节点上添加内容，另一个线程删除了这个节点，这时浏览器就不知道该以那个县城为准了。
 
-2. 
+2.
    为了简单，从一开始**JavaScript就是单线程**，单线程，事件循环机制已经成为JS的核心。
 
 3. 为了利用多核CPU的计算能力，H5的Web Worker实现的“多线程”实际上指的是“多子线程”，完全受控于主线程，且不允许操作DOM；
@@ -82,7 +77,7 @@ Event Loop 过程
 
 堆 (heap): 堆是基于树抽象数据类型的一种特殊的数据结构。
 
-JavaScript 中的内存分为 `堆内存` 和 `栈内存` , 
+JavaScript 中的内存分为 `堆内存` 和 `栈内存` ,
 
 JavaScript 中引用类型值的大小是不固定的，因此它们会被存储到 堆内存 中，由系统自动分配存储空间。JavaScript 不允许直接访问堆内存中的位置，因此我们不能直接操作对象的堆内存空间，而是操作 对象的引用。
 
@@ -152,7 +147,7 @@ JavaScript代码的执行过程中，除了依靠**函数调用栈**来搞定函
 * I/O
 * UI render
 * 事件
-* postMessage 
+* postMessage
 * MessageChannel
 
 微任务micro-task大概包括:
@@ -233,7 +228,7 @@ console.log('script end')
 * 执行async1(), 会调用async2(), 然后输出 `async2 end` , 此时将会保留async1函数的上下文，然后跳出async1函数。
 * 遇到setTimeout，产生一个宏任务
 * 执行Promise，输出 `Promise` 。遇到then，产生第一个微任务
-* 继续执行代码，输出 `script end` 
+* 继续执行代码，输出 `script end`
 * 代码逻辑执行完毕(当前宏任务执行完毕)，开始执行当前宏任务产生的微任务队列，输出 `promise1` ，该微任务遇到then，产生一个新的微任务
 * 执行产生的微任务，输出 `promise2` , 当前微任务队列执行完毕。执行权回到async1
 * 执行await, 实际上会产生一个promise返回，即
@@ -244,9 +239,8 @@ let promise_ = new Promise((resolve, reject) {
 })
 ```
 
-执行完成，执行await后面的语句，输出 `async1 end` 
-
-* 最后，执行下一个宏任务，即执行setTimeout，输出 `setTimeout` 
+执行完成，执行await后面的语句，输出 `async1 end`
+* 最后，执行下一个宏任务，即执行setTimeout，输出 `setTimeout`
 
 #### 注意
 
@@ -335,7 +329,7 @@ micro-task 大概包括：
 
 因此，从上面这个简化图中，我们可以分析出 node 的事件循环的阶段顺序为：
 
-输入数据阶段(incoming data)->轮询阶段(poll)->检查阶段(check)->关闭事件回调阶段(close callback)->定时器检测阶段(timers)->I/O事件回调阶段(I/O callbacks)->闲置阶段(idle, prepare)->轮询阶段... 
+输入数据阶段(incoming data)->轮询阶段(poll)->检查阶段(check)->关闭事件回调阶段(close callback)->定时器检测阶段(timers)->I/O事件回调阶段(I/O callbacks)->闲置阶段(idle, prepare)->轮询阶段...
 
 #### 阶段概述
 
@@ -346,32 +340,79 @@ micro-task 大概包括：
 * 检查阶段(check)：setImmediate() 回调函数在这里执行
 * 关闭事件回调阶段(close callback)：一些关闭的回调函数，如：执行 socket 的 close 事件回调socket.on('close', ... )。
 
-#### 三大重点阶段
+#### 整体流程
 
-与我们开发相关的三个阶段分别是 `poll` 、 `check` 、 `timers` ，日常开发中的绝大部分异步任务都是在 `poll` 、 `check` 、 `timers` 这3个阶段处理的, 所以我们来重点看看。
+> node 的初始化
 
-##### timers
+1. 初始化 node 环境。
+2. 执行输入代码。
+3. 执行 process.nextTick 回调。
+4. 执行 microtasks。
+5. 进入 event-loop
 
-timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。 同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。
+> 1.进入 timers 阶段
 
-##### poll
+1. 检查 timer 队列是否有到期的 timer 回调，如果有，将到期的 timer 回调按照 timerId 升序执行。
+2. 检查是否有 process.nextTick 任务，如果有，全部执行。
+3. 检查是否有microtask，如果有，全部执行。
+4. 退出该阶段。
 
-poll 是一个至关重要的阶段，poll 阶段的执行逻辑流程图如下：
+> 2.进入IO callbacks阶段。
 
-![](./img/poll-logic-flowchart.png)
+1. 检查是否有 pending 的 I/O 回调。如果有，执行回调。如果没有，退出该阶段。
+2. 检查是否有 process.nextTick 任务，如果有，全部执行。
+3. 检查是否有microtask，如果有，全部执行。
+4. 退出该阶段。
 
-如果当前已经存在定时器，而且有定时器到时间了，拿出来执行，eventLoop 将回到 timers 阶段。
+> 3.进入 idle，prepare 阶段：
 
-如果没有定时器, 会去看回调函数队列。
+这两个阶段与我们编程关系不大，暂且按下不表。
 
-* 如果 poll 队列不为空，会遍历回调队列并同步执行，直到队列为空或者达到系统限制
-* 如果 poll 队列为空时，会有两件事发生
-  + 如果有 setImmediate 回调需要执行，poll 阶段会停止并且进入到 check 阶段执行回调
-  + 如果没有 setImmediate 回调需要执行，会等待回调被加入到队列中并立即执行回调，这里同样会有个超时时间设置防止一直等待下去, 一段时间后自动进入 check 阶段。
+> 4.进入 poll 阶段
 
-##### check
+首先检查是否存在尚未完成的回调，如果存在，那么分两种情况。
 
-check 阶段。这是一个比较简单的阶段，直接执行 setImmdiate 的回调。
+**第一种情况：**
+
+1. 如果有可用回调（可用回调包含到期的定时器还有一些IO事件等），执行所有可用回调。
+2. 检查是否有 process.nextTick 回调，如果有，全部执行。
+3. 检查是否有 microtaks，如果有，全部执行。
+4. 退出该阶段。
+
+**第二种情况：**
+
+如果没有可用回调。
+
+1. 检查是否有 immediate 回调，如果有，退出 poll 阶段。如果没有，阻塞在此阶段，等待新的事件通知。
+2. 如果不存在尚未完成的回调，退出poll阶段。
+
+
+> 5.进入 check 阶段
+
+1. 如果有immediate回调，则执行所有immediate回调。
+2. 检查是否有 process.nextTick 回调，如果有，全部执行。
+3. 检查是否有 microtaks，如果有，全部执行。
+4. 退出 check 阶段
+
+> 6.进入 closing 阶段。
+
+1. 如果有immediate回调，则执行所有immediate回调。
+2. 检查是否有 process.nextTick 回调，如果有，全部执行。
+3. 检查是否有 microtaks，如果有，全部执行。
+4. 退出 closing 阶段
+
+检查是否有活跃的 handles（定时器、IO等事件句柄）
+
+如果有，继续下一轮循环。
+如果没有，结束事件循环，退出程序。
+
+----
+
+我们可以发现，在事件循环的每一个子阶段退出之前都会按顺序执行如下过程：
+
+- 检查是否有 process.nextTick 回调，如果有，全部执行。
+- 检查是否有 microtaks，如果有，全部执行。
+- 退出当前阶段。
 
 #### process.nextTick
 
@@ -395,8 +436,8 @@ setImmediate(() => console.log('timeout3'));
 setImmediate(() => console.log('timeout4'));
 ```
 
-* 在 node11 之前，因为每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行，因此上述代码是先进入 check 阶段，执行所有 setImmediate，完成之后执行 nextTick 队列，最后执行微任务队列，因此输出为 `timeout1=>timeout2=>timeout3=>timeout4=>next tick1=>next tick2=>promise resolve` 
-* 在 node11 之后，process.nextTick 是微任务的一种, 因此上述代码是先进入 check 阶段，执行一个 setImmediate 宏任务，然后执行其微任务队列，再执行下一个宏任务及其微任务, 因此输出为 `timeout1=>next tick1=>promise resolve=>timeout2=>next tick2=>timeout3=>timeout4` 
+* 在 node11 之前，因为每一个 eventLoop 阶段完成后会去检查 nextTick 队列，如果里面有任务，会让这部分任务优先于微任务执行，因此上述代码是先进入 check 阶段，执行所有 setImmediate，完成之后执行 nextTick 队列，最后执行微任务队列，因此输出为 `timeout1=>timeout2=>timeout3=>timeout4=>next tick1=>next tick2=>promise resolve`
+* 在 node11 之后，process.nextTick 是微任务的一种, 因此上述代码是先进入 check 阶段，执行一个 setImmediate 宏任务，然后执行其微任务队列，再执行下一个宏任务及其微任务, 因此输出为 `timeout1=>next tick1=>promise resolve=>timeout2=>next tick2=>timeout3=>timeout4`
 
 ### node 版本差异说明
 
@@ -423,10 +464,10 @@ setTimeout(() => {
 }, 0)
 ```
 
-* 如果是 node11 版本**一旦执行一个阶段里的一个宏任务(setTimeout, setInterval和setImmediate)就立刻执行微任务队列**，这就跟浏览器端运行一致，最后的结果为 `timer1=>promise1=>timer2=>promise2` 
+* 如果是 node11 版本**一旦执行一个阶段里的一个宏任务(setTimeout, setInterval和setImmediate)就立刻执行微任务队列**，这就跟浏览器端运行一致，最后的结果为 `timer1=>promise1=>timer2=>promise2`
 * 如果是 node10 及其之前版本要看第一个定时器执行完，第二个定时器是否在完成队列中.
-  + 如果是第二个定时器还未在完成队列中，最后的结果为 `timer1=>promise1=>timer2=>promise2` 
-  + 如果是第二个定时器已经在完成队列中，则最后的结果为 `timer1=>timer2=>promise1=>promise2` 
+  + 如果是第二个定时器还未在完成队列中，最后的结果为 `timer1=>promise1=>timer2=>promise2`
+  + 如果是第二个定时器已经在完成队列中，则最后的结果为 `timer1=>timer2=>promise1=>promise2`
 
 #### check 阶段的执行时机变化
 
@@ -440,8 +481,8 @@ setImmediate(() => console.log('immediate3'));
 setImmediate(() => console.log('immediate4'));
 ```
 
-* 如果是 node11 后的版本，会输出 `immediate1=>immediate2=>promise resolve=>immediate3=>immediate4` 
-* 如果是 node11 前的版本，会输出 `immediate1=>immediate2=>immediate3=>immediate4=>promise resolve` 
+* 如果是 node11 后的版本，会输出 `immediate1=>immediate2=>promise resolve=>immediate3=>immediate4`
+* 如果是 node11 前的版本，会输出 `immediate1=>immediate2=>immediate3=>immediate4=>promise resolve`
 
 #### nextTick 队列的执行时机变化
 
@@ -455,16 +496,15 @@ setImmediate(() => console.log('timeout3'));
 setImmediate(() => console.log('timeout4'));
 ```
 
-* 如果是 node11 后的版本，会输出 `timeout1=>timeout2=>next tick=>timeout3=>timeout4` 
-* 如果是 node11 前的版本，会输出 `timeout1=>timeout2=>timeout3=>timeout4=>next tick` 
-
+* 如果是 node11 后的版本，会输出 `timeout1=>timeout2=>next tick=>timeout3=>timeout4`
+* 如果是 node11 前的版本，会输出 `timeout1=>timeout2=>timeout3=>timeout4=>next tick`
 以上几个例子，你应该就能清晰感受到它的变化了，反正记着一个结论，如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout, setInterval和setImmediate)就立刻执行对应的微任务队列。
 
 ### node 和 浏览器 eventLoop的主要区别
 
 两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的，而nodejs中的微任务是在不同阶段之间执行的。
 
-> 本文部分来自 
+> 本文部分来自
 >
 > https://juejin.im/post/5e5c7f6c518825491b11ce93
 >
