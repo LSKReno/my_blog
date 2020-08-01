@@ -5,5 +5,8 @@ module.exports = {
 	sidebarDepth: 2, // 可选的, 默认值是 1
 	children: [
 		'/html/001-html-semantic/',
+		'/html/002-seo/',
+		'/html/003-viewport/',
+		'/html/004-block-inline/',
 	]
 }
