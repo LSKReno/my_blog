@@ -5,5 +5,7 @@ module.exports = {
 	sidebarDepth: 2, // 可选的, 默认值是 1
 	children: [
 		'/common/001-browsersList/',
+		'/common/002-nrm/',
+		'/common/003-simple-request/',
 	]
 }

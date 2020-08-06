@@ -45,7 +45,7 @@ import frontend_security_sidebar from "../sidebar/frontend-security";
 import automated_test_sidebar from "../sidebar/automated-test";
 import module_standard_sidebar from "../sidebar/module-standard";
 import common_sidebar from "../sidebar/common";
-import common from '../sidebar/common';
+import optimization_sidebar from "../sidebar/optimization";
 
 export default {
   data() {
@@ -59,13 +59,14 @@ export default {
         deep_in_js_sidebar,
         browser_sidebar,
         js_api_sidebar,
-        network_tcp_sidebar,
+        // network_tcp_sidebar,
         interview_sidebar,
         framework_design_sidebar,
         js_hand_sidebar,
         vue_sidebar,
         koa_sidebar,
         mongodb_sidebar,
+        optimization_sidebar,
         js_design_pattern_sidebar,
         frontend_security_sidebar,
 		module_standard_sidebar,
