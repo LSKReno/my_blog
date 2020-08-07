@@ -114,12 +114,11 @@ cookie 的属性格式是 `name=value键值对` ，可以设置 Cookie 的名称
   SameSite 可以有下面三种值：
 
   1. **Strict** ：仅允许第一方请求携带 Cookie，即浏览器将只发送同一站点请求的 Cookie，即**当前网页 URL 与请求目标 URL 完全一致**。
-
-  2.**Lax** ：只允许在 `get方法提交表单` 和 `a标签发送get请求` 请求携带 Cookie。
-
-  3. **None** ：无论是否跨站，请求都会自动携带上 Cookie。
-
-  **之前默认是 `None` 的，Chrome80 后默认是 `Lax` 。**
+2. **Lax** ：只允许在 `get方法提交表单` 和 `a标签发送get请求` 请求携带 Cookie。
+  
+3. **None** ：无论是否跨站，请求都会自动携带上 Cookie。
+  
+**之前默认是 `None` 的，Chrome80 后默认是 `Lax` 。**
 
 ## Chrome80默认SameSite 
 
