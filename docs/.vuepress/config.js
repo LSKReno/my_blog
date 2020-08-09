@@ -18,6 +18,10 @@ module.exports = {
             rel: 'mainfest',
             href: '/mainfest.json'
         }],
+        ['meta', {
+            name: "baidu-site-verification",
+            content: "S9wleG7bTn"
+        }, ``],
         ['script', {
             type: "text/javascript",
             src: "https://s4.cnzz.com/z_stat.php?id=1279144299&web_id=1279144299"
@@ -30,7 +34,17 @@ module.exports = {
           var s = document.getElementsByTagName("script")[0];
           s.parentNode.insertBefore(hm, s);
           })();
-		    `]
+		`],
+        // 鼠标点击特效 start
+        ['script', {
+            src: "/mouse-click.js"
+        }, ``],
+        ['canvas', {
+            width: 1777,
+            height: 841,
+            style: "position: fixed; left: 0px; top: 0px; z-index: 2147483647; pointer-events: none;"
+        }, ``],
+        // 鼠标点击特效 end
     ],
     port: 80,
     markdown: {
