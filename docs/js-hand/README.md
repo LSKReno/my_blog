@@ -968,6 +968,16 @@ console.log(uniqBy(singers, 'id'))
 
 原理是利用 `Map` 的键不可重复
 
+## 数组去重(filter版)
+
+```js
+arr = ['a', 'b', 'c', 'a'];
+let arr2 = arr.filter((item,index,self)=>{
+    return self.indexOf(item) == index;
+});
+console.log(arr2);
+```
+
 ## 数组扁平化（技巧版）
 
 利用 `toString` 把数组变成以逗号分隔的字符串，遍历数组把每一项再变回原来的类型。缺点：数组中元素必须是 `Number` 类型， `String` 类型会被转化成 `Number`
@@ -1000,6 +1010,74 @@ const arr = [1, [2],
 flatten(arr, 1) // [1, [2], [3, [4]]]
 flatten(arr, 2) // [1，2, [3, 4]]
 flatten(arr, 3) // [1，2, 3, 4]
+```
+
+## JSON.stringify 和 JSON.parse
+
+```javascript
+if (!window.JSON) {
+    window.JSON = {
+        parse: function(jsonStr) {
+            return eval('(' + jsonStr + ')');
+        },
+        stringify: function(jsonObj) {
+            var result = '',
+                curVal;
+            if (jsonObj === null) {
+                return String(jsonObj);
+            }
+            switch (typeof jsonObj) {
+                case 'number':
+                case 'boolean':
+                    return String(jsonObj);
+                case 'string':
+                    return '"' + jsonObj + '"';
+                case 'undefined':
+                case 'function':
+                    return undefined;
+            }
+
+            switch (Object.prototype.toString.call(jsonObj)) {
+                case '[object Array]':
+                    result += '[';
+                    for (var i = 0, len = jsonObj.length; i < len; i++) {
+                        curVal = JSON.stringify(jsonObj[i]);
+                        result += (curVal === undefined ? null : curVal) + ",";
+                    }
+                    if (result !== '[') {
+                        result = result.slice(0, -1);
+                    }
+                    result += ']';
+                    return result;
+                case '[object Date]':
+                    return '"' + (jsonObj.toJSON ? jsonObj.toJSON() : jsonObj.toString()) + '"';
+                case '[object RegExp]':
+                    return "{}";
+                case '[object Object]':
+                    result += '{';
+                    for (i in jsonObj) {
+                        if (jsonObj.hasOwnProperty(i)) {
+                            curVal = JSON.stringify(jsonObj[i]);
+                            if (curVal !== undefined) {
+                                result += '"' + i + '":' + curVal + ',';
+                            }
+                        }
+                    }
+                    if (result !== '{') {
+                        result = result.slice(0, -1);
+                    }
+                    result += '}';
+                    return result;
+
+                case '[object String]':
+                    return '"' + jsonObj.toString() + '"';
+                case '[object Number]':
+                case '[object Boolean]':
+                    return jsonObj.toString();
+            }
+        }
+    };
+}
 ```
 
 ## 发布订阅EventEmitter
@@ -1063,13 +1141,12 @@ class EventEmitter {
           this.bar = bar
       }
   }
-
-  ES5 `的继承，实质是先创造子类的实例对象，然后将再将父类的方法添加到`
-  this `上。 `
-  ES6 `的继承，先创造父类的实例对象（所以必须先调用`
-  super `方法，然后再用子类的构造函数修改`
-  this
 ```
+
+`ES5` 的继承，实质是先创造子类的实例对象，然后将再将父类的方法添加到`this `上。 
+
+`ES6 `的继承，先**创造父类的实例对象**（所以必须先调用`
+super `方法，然后**再用子类的构造函数修改`this`**
 
 ## THANK
 
@@ -1080,3 +1157,5 @@ class EventEmitter {
 [如何写出一个惊艳面试官的深拷贝?](https://juejin.im/post/5d6aa4f96fb9a06b112ad5b1#heading-13)
 
 [头条面试官：你知道如何实现高性能版本的深拷贝嘛？](https://juejin.im/post/5df7175fe51d45582512962c)
+
+[JSON.stringify 和 JSON.parse 的实现](https://www.jianshu.com/p/f1c8bcd16f71)

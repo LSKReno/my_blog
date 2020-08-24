@@ -1,4 +1,4 @@
-# JavaScript数组所有API全解密
+# JavaScript数组所有API
 
 <motto></motto>
 

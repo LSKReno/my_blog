@@ -44,6 +44,7 @@ import vue_cli_sidebar from "../sidebar/vue-cli";
 import frontend_security_sidebar from "../sidebar/frontend-security";
 import automated_test_sidebar from "../sidebar/automated-test";
 import module_standard_sidebar from "../sidebar/module-standard";
+import datav_sidebar from "../sidebar/datav";
 import common_sidebar from "../sidebar/common";
 import optimization_sidebar from "../sidebar/optimization";
 
@@ -70,6 +71,7 @@ export default {
         js_design_pattern_sidebar,
         frontend_security_sidebar,
 		module_standard_sidebar,
+		datav_sidebar,
 		common_sidebar,
         os_sidebar,
         automated_test_sidebar,

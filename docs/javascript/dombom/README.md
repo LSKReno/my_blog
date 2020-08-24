@@ -16,7 +16,7 @@
 
 * Dom继承关系图
 
-  
+
 
 ![img](https://lskreno-typora.oss-cn-beijing.aliyuncs.com/img/nodetree.9e0ddeaf.png)
 
@@ -40,7 +40,7 @@
 
   + URL: 获取当前文档的URL地址, 只读
 
-    
+
 
 ``` js
     document.URL
@@ -48,7 +48,7 @@
 
   + title: 获取当前文档Head中的title的文字内容, 可写入修改
 
-    
+
 
 ``` js
     document.title
@@ -64,7 +64,7 @@
 
 * 获取body, html
 
-  
+
 
 ``` js
   // 获取body元素
@@ -77,7 +77,7 @@
 
 * Element
 
-  
+
 
 ``` js
   // Element对象是所有标签元素的基础对象,封装了所有标签元素的公共方法与属性
@@ -106,7 +106,7 @@
 
 * HTMLCollection
 
-  
+
 
 ``` js
   // HTMLCollection对象,是伪数组。元素的动态集合,提供了用来从该集合选择元素的方法和属性,当其所包含的文档结构发生改变时,会自动更新.
@@ -131,7 +131,7 @@
 
 * 父级节点
 
-  
+
 
 ``` js
   node.parentNode // 找不到返回null
@@ -139,7 +139,7 @@
 
 * 子节点
 
-  
+
 
 ``` js
   parentNode.childNodes // 注意: 会返回3种子节点=>如果指向某种节点,可通过nodeType判断
@@ -153,7 +153,7 @@
 
 * 兄弟节点
 
-  
+
 
 ``` js
   node.nextSibling // 当前元素的下一个兄弟节点(会包含3种节点)
@@ -165,7 +165,7 @@
 
 * 节点创建与添加
 
-  
+
 
 ``` js
   // 创建节点
@@ -178,7 +178,7 @@
 
 * 节点移除
 
-  
+
 
 ``` js
   parentNode.removeChild(child节点) // 删除父元素的某个子节点
@@ -186,7 +186,7 @@
 
 * 节点复制
 
-  
+
 
 ``` js
   node.cloneNode() // 拷贝node节点=>浅拷贝,只拷贝标签,不拷贝里面内容
@@ -195,7 +195,7 @@
 
 * 三种动态创建元素的区别
 
-  
+
 
 ``` js
   document.write('<div>123</div>') // 注意:当页面文档流加载完毕,会进行重绘
@@ -271,7 +271,7 @@ document.addEventListener('selectstart', function(e) {
 
 * 传统方式: 使用on前缀 => 事件注册具有唯一性, 后者会覆盖前者
 
-  
+
 
 ``` html
   <p onclick="alert(123)">
@@ -279,7 +279,7 @@ document.addEventListener('selectstart', function(e) {
   </p>
 ```
 
-  
+
 
 ``` js
   const elem = document.querySelector('p')
@@ -292,7 +292,7 @@ document.addEventListener('selectstart', function(e) {
 
 * 监听方式
 
-  
+
 
 ``` js
   // true:事件句柄在捕获阶段执行 false(默认):事件句柄在冒泡阶段执行
@@ -375,7 +375,7 @@ elem.onclick = function(event) { // 此处的event就是事件对象
 
 * 阻止事件默认行为
 
-  
+
 
 ``` html
   <!-- 方式4 -->
@@ -396,7 +396,7 @@ elem.onclick = function(event) { // 此处的event就是事件对象
 
 * 阻止冒泡
 
-  
+
 
 ``` html
   <div class="parent">
@@ -452,7 +452,7 @@ event 对象代表事件的状态，跟事件相关的一系列信息的集合�
 | e.screenY    | 返回鼠标相对于电脑屏幕的Y坐标         |
 
 ``` js
-//鼠标事件对象 MouseEvent 
+//鼠标事件对象 MouseEvent
 document.addEventListener('click'，function(e) {
     //1.client鼠标在可视区的x和y坐标
     console.log(e.clientx);
@@ -515,7 +515,7 @@ window.scroll(x, y) // 滚动窗口至文档中的特定位置 => such: window.s
 
 * 窗口加载事件
 
-  
+
 
 ``` js
   window.onload = function() {}
@@ -530,7 +530,7 @@ window.scroll(x, y) // 滚动窗口至文档中的特定位置 => such: window.s
 
 * 窗口大小调整事件
 
-  
+
 
 ``` js
   // 窗口大小发生变化,就会触发
@@ -607,7 +607,7 @@ if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobil
 
 * setInterval(重复执行, 每次调用有时间延迟)
 
-  
+
 
 ``` js
   let inervalId = setInterval(code, milliseconds);
@@ -616,7 +616,7 @@ if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobil
 
 * setTimeOut(只执行一次, 延迟delay毫秒后执行)
 
-  
+
 
 ``` js
   let interValId = setTimeOut(fn, delay)
@@ -624,7 +624,7 @@ if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobil
 
 * 清除延迟
 
-  
+
 
 ``` js
   clearInterVal(inervalId) // 对应setInterval
@@ -633,7 +633,7 @@ if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobil
 
 * 标题跑马灯效果实现
 
-  
+
 
 ``` js
   // 数组方式实现跑马灯效果
@@ -679,7 +679,7 @@ if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobil
 * 异步任务(回调函数)放到任务队列中
 * 一旦执行栈中的同步任务执行完毕, 系统就会依次执行任务队列中的异步任务
 
-[关于JS时间循环详情请移步另一篇](http://lskreno.top/interview/001-eventloop/)
+[关于JS事件循环详情请移步另一篇](http://blog.lskreno.top/interview/001-eventloop/)
 
 ## 本地存储
 

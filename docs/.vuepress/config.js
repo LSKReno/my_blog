@@ -123,6 +123,7 @@ module.exports = {
             sidebars.framework_design_sidebar,
             sidebars.module_standard_sidebar,
             sidebars.common_sidebar,
+            sidebars.datav_sidebar,
             sidebars.os_sidebar,
             // sidebars.automated_test_sidebar,
             sidebars.vue_cli_sidebar,

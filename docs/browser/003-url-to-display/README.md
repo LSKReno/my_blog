@@ -23,24 +23,26 @@
 13. 提交文档（网络进程将 HTML 文档提交给渲染进程）
 14. 渲染阶段
        1. 构建 DOM 树（HTM 解析器），字节流 —> 字符流 —> Tokens —> 节点 —> DOM树
+
        2. 解析过程中遇到图片、样式表、js文件，启动下载
+
        3. 样式计算（或者叫构建 CSSOM）
           - 把CSS转换为浏览器能理解的 stylesheets 结构
           - 转换样式表中的属性值，使其标准化
           - 计算 DOM 树的每个节点的具体样式（继承，层叠）
           - 最终形成 computedStyle
-          4. 页面布局阶段（计算几何位置信息，生成 Render Tree）
-             - 创建渲染树（只包含可见节点，不可见节点包括：a）`script`,`meta`这样本身不可见的标签。b)被css 隐藏的节点，如`display: none`） —> DOM + ComputedStyle
-             - 坐标计算
-             - 渲染树中包含了大量的渲染元素，每一个渲染元素会被分到一个图层中，每个图层又会被加载到GPU形成渲染纹理，而图层在GPU中， `transform` 是不会触发 repaint 的，这一点非常类似3D绘图功能，最终这些使用 `transform` 的图层都会由独立的合成进程进行处理。
-          5. JS解析
-             1. 浏览器创建Document对象并解析HTML，将解析到的元素和文本节点添加到文档中，此时**document.readystate为loading**
-             2. HTML解析器遇到**没有async和defer的script时**，将他们添加到文档中，然后执行行内或外部脚本。这些脚本会同步执行，并且在脚本下载和执行时解析器会暂停。这样就可以用 document.write() 把文本插入到输入流中。**同步脚本经常简单定义函数和注册事件处理程序，他们可以遍历和操作script和他们之前的文档内容**
-             3. 当解析器遇到设置了**async**属性的script时，开始下载脚本并继续解析文档。脚本会在它**下载完成后尽快执行**，但是**解析器不会停下来等它下载**。异步脚本**禁止使用document.write()**，它们可以访问自己script和之前的文档元素
-             4. 当文档完成解析，document.readState 变成 interactive
-             5. 所有**defer**脚本会**按照在文档出现的顺序执行**，延迟脚本**能访问完整文档树**，禁止使用document.write()
-             6. 浏览器**在Document对象上触发 DOMContentLoaded 事件**
-             7. 此时文档完全解析完成，浏览器可能还在等待如图片等内容加载，等这些**内容完成载入并且所有异步脚本完成载入和执行**，**document.readState** 变为 **complete**，**window**触发 **load** 事件
+       4. 页面布局阶段（计算几何位置信息，生成 Render Tree）
+          - 创建渲染树（只包含可见节点，不可见节点包括：a）`script`,`meta`这样本身不可见的标签。b)被css 隐藏的节点，如`display: none`） —> DOM + ComputedStyle
+          - 坐标计算
+          - 渲染树中包含了大量的渲染元素，每一个渲染元素会被分到一个图层中，每个图层又会被加载到GPU形成渲染纹理，而图层在GPU中， `transform` 是不会触发 repaint 的，这一点非常类似3D绘图功能，最终这些使用 `transform` 的图层都会由独立的合成进程进行处理。
+       5. JS解析
+          1. 浏览器创建Document对象并解析HTML，将解析到的元素和文本节点添加到文档中，此时**document.readystate为loading**
+          2. HTML解析器遇到**没有async和defer的script时**，将他们添加到文档中，然后执行行内或外部脚本。这些脚本会同步执行，并且在脚本下载和执行时解析器会暂停。这样就可以用 document.write() 把文本插入到输入流中。**同步脚本经常简单定义函数和注册事件处理程序，他们可以遍历和操作script和他们之前的文档内容**
+          3. 当解析器遇到设置了**async**属性的script时，开始下载脚本并继续解析文档。脚本会在它**下载完成后尽快执行**，但是**解析器不会停下来等它下载**。异步脚本**禁止使用document.write()**，它们可以访问自己script和之前的文档元素
+          4. 当文档完成解析，document.readState 变成 interactive
+          5. 所有**defer**脚本会**按照在文档出现的顺序执行**，延迟脚本**能访问完整文档树**，禁止使用document.write()
+          6. 浏览器**在Document对象上触发 DOMContentLoaded 事件**
+          7. 此时文档完全解析完成，浏览器可能还在等待如图片等内容加载，等这些**内容完成载入并且所有异步脚本完成载入和执行**，**document.readState** 变为 **complete**，**window**触发 **load** 事件
    17. 分层 —> 图层树 Layer Tree
    18. 绘制（绘制指令有很多的小指令构成）
    19. 分块（合成线程将图层划分为图块）
