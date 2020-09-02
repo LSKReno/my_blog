@@ -596,40 +596,6 @@ Function.prototype.myBind = function(context, ...args) {
 }
 ```
 
-``` js
-Function.prototype.bind2 = function(context) {
-    // 1. 判断调用bind的是不是一个函数
-    if (typeof this !== "function") {
-        throw new Error(
-            "Function.prototype.bind - what is trying to be bound is not callable"
-        );
-    }
-    // 2. 外层的this指向调用者(也就是调用的函数)
-    var self = this;
-    // 3. 收集调用bind时的其它参数
-    var args = Array.prototype.slice.call(arguments, 1);
-
-    // 4. 创建一个返回的函数
-    var fBound = function() {
-        // 6. 收集调用新的函数时传入的其它参数
-        var innerArgs = Array.prototype.slice.call(arguments);
-        // 7. 使用apply改变调用函数时this的指向
-        // 作为构造函数调用时this表示的是新产生的对象, 不作为构造函数用的时候传递context
-        return self.apply(
-            this instanceof fNOP ? this : context,
-            args.concat(innerArgs)
-        );
-    };
-    // 5. 创建一个空的函数, 且将原型指向调用者的原型(为了能用调用者原型中的属性)
-    // 下面三步的作用有点类似于 fBoun.prototype = this.prototype 但有区别
-    var fNOP = function() {};
-    fNOP.prototype = this.prototype;
-    fBound.prototype = new fNOP();
-    // 8. 返回最后的结果
-    return fBound;
-};
-```
-
 ## 模拟new
 
 * 创建一个新的空对象
@@ -1143,7 +1109,7 @@ class EventEmitter {
   }
 ```
 
-`ES5` 的继承，实质是先创造子类的实例对象，然后将再将父类的方法添加到`this `上。 
+`ES5` 的继承，实质是先创造子类的实例对象，然后将再将父类的方法添加到`this `上。
 
 `ES6 `的继承，先**创造父类的实例对象**（所以必须先调用`
 super `方法，然后**再用子类的构造函数修改`this`**

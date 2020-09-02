@@ -2,7 +2,7 @@
 
 <motto></motto>
 
-## 组合式继承（原型链+构造函数继承）
+<!-- ## 组合式继承（原型链+构造函数继承）
 
 ```js
 // 父类
@@ -123,7 +123,7 @@ console.log(c1.sex)
 console.log(Coder.getCount())
 ```
 
-
+ -->
 
 
 

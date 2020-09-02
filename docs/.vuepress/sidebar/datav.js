@@ -6,6 +6,6 @@ module.exports = {
     children: [
         '/datav/001-canvas/',
         '/datav/002-svg/',
-        '/datav/003-img-compress/',
+        // '/datav/003-img-compress/',
     ]
 }
