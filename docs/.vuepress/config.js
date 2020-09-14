@@ -103,7 +103,7 @@ module.exports = {
             // 	children: [
             // 		'/good-summary/',
             // 	]
-            // },
+			// },
             sidebars.html_sidebar,
             sidebars.css_sidebar,
             sidebars.javascript_sidebar,
@@ -117,7 +117,8 @@ module.exports = {
             // sidebars.vue_sidebar,
             sidebars.koa_sidebar,
             sidebars.mongodb_sidebar,
-            sidebars.optimization_sidebar,
+			sidebars.optimization_sidebar,
+			sidebars.error_handler_sidebar,
             sidebars.js_design_pattern_sidebar,
             sidebars.frontend_security_sidebar,
             sidebars.framework_design_sidebar,

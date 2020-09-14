@@ -47,6 +47,7 @@ import module_standard_sidebar from "../sidebar/module-standard";
 import datav_sidebar from "../sidebar/datav";
 import common_sidebar from "../sidebar/common";
 import optimization_sidebar from "../sidebar/optimization";
+import error_handler_sidebar from "../sidebar/error-handler";
 
 export default {
   data() {
@@ -67,7 +68,8 @@ export default {
         vue_sidebar,
         koa_sidebar,
         mongodb_sidebar,
-        optimization_sidebar,
+		optimization_sidebar,
+		error_handler_sidebar,
         js_design_pattern_sidebar,
         frontend_security_sidebar,
 		module_standard_sidebar,
