@@ -9,7 +9,6 @@ for (const file of files) {
   if (file.toLowerCase().endsWith('js')) {
     const sidebar = require(`./${file}`)
 	sidebars[`${file.replace(/\.js/, '_sidebar').replace(/-/g,'_')}`] = sidebar
-	console.log(sidebars)
   }
 }
 

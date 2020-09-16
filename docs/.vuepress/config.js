@@ -1,12 +1,12 @@
 const nav = require('./nav/nav')
 const sidebars = require('./sidebar/index') // 加载所有的sidebars
 
-console.log(__dirname, 'dirname');
+// console.log(__dirname, 'dirname');
 module.exports = {
     // base: '/my_blog/',
     dest: 'public',
     title: '白糖炒栗子de前端Blog',
-    keywords: '白糖炒栗子, LSKReno, Half Town, 前端路上',
+    keywords: '白糖炒栗子, LSKReno, 前端路上',
     description: '白糖炒栗子哒前端Blog',
     serviceWorker: true,
     head: [
